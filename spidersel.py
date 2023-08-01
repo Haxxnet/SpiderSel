@@ -73,12 +73,13 @@ if __name__ == "__main__":
     visited_urls = set()
     visited_urls.add(args.url)
     keywords = spider_links(driver, args.url, args.depth, visited_urls, args.min_length)
+    unique_keywords = list(set(keywords))
 
     # Close the browser after spidering is done
     driver.quit()
 
     # Combine keywords from all spidered sites and print them as newline-separated values
-    combined_keywords = '\n'.join(keywords)
+    combined_keywords = '\n'.join(unique_keywords)
     keyword_list = combined_keywords.split('\n')
     num_keywords = len(keyword_list)
 
