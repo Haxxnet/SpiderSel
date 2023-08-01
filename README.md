@@ -4,7 +4,7 @@ Python 3 script to crawl and spider websites for keywords via selenium.
 ## 🎓 Usage
 
 ````bash
-usage: spidersel.py [-h] [--url URL] [--depth DEPTH] [--min-length MIN_LENGTH]
+usage: spidersel.py [-h] --url URL [--depth DEPTH] [--min-length MIN_LENGTH]
 
 Web Crawler and Keyword Extractor
 
