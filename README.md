@@ -23,7 +23,7 @@ options:
 # clone repository and change directory
 git clone https://github.com/Haxxnet/SpiderSel && cd SpiderSel
 
-# optionally installed google-chrome
+# optionally install google-chrome if not available yet
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
 
