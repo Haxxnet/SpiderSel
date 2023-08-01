@@ -20,8 +20,7 @@ options:
 ### External Dockerhub Image
 
 ````
-# start the spidersel.py script via docker
-docker run -v ${PWD}:/app/results --rm l4rm4nd/spidersel:latest --url https:/www.apple.com
+docker run -v ${PWD}:/app/results --rm l4rm4nd/spidersel:latest --url https://www.apple.com
 ````
 
 You will find your scan results in the current directory.
