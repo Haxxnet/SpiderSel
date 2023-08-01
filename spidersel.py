@@ -83,11 +83,12 @@ if __name__ == "__main__":
     num_keywords = len(keyword_list)
 
     # Get the root domain from the URL
-    root_domain = tldextract.extract(args.url).domain
+    extracted = tldextract.extract(args.url)
+    fqdn = f"{extracted.subdomain}.{extracted.domain}.{extracted.suffix}"
     # Get the current date and time in the specified format
     current_datetime = datetime.now().strftime("%Y%m%d%H%M%S")
     # Create the output filename
-    output_filename = f"{root_domain}_{current_datetime}.txt"
+    output_filename = f"{fqdn}_{current_datetime}.txt"
 
     # Write the keywords to the output file
     with open(output_filename, 'w') as file:
