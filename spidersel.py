@@ -21,9 +21,9 @@ def extract_keywords(page_content, min_length):
     for text in soup.stripped_strings:
         words = text.split()
         for word in words:
+            word = remove_special_characters(word)
             if len(word) >= min_length:
-
-                keywords.add(remove_special_characters(word.lower()))
+                keywords.add(word.lower())
     return list(keywords)
 
 def remove_special_characters(input_string):
