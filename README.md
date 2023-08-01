@@ -9,11 +9,10 @@ usage: spidersel.py [-h] [--url URL] [--depth DEPTH] [--min-length MIN_LENGTH]
 Web Crawler and Keyword Extractor
 
 options:
-  -h, --help            show this help message and exit
-  --url URL             URL of the website to crawl
-  --depth DEPTH         Depth of spidering (number of subpages to visit) (default: 3)
-  --min-length MIN_LENGTH
-                        Minimum keyword length (default: 4)
+  -h, --help                  show this help message and exit
+  --url URL                   URL of the website to crawl
+  --depth DEPTH               Depth of spidering (number of subpages to visit) (default: 3)
+  --min-length MIN_LENGTH     Minimum keyword length (default: 4)
 ````
 
 ## 🐍 Example 1 - Native Python
