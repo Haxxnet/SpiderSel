@@ -11,7 +11,7 @@ Web Crawler and Keyword Extractor
 options:
   -h, --help                  show this help message and exit
   --url URL                   URL of the website to crawl
-  --depth DEPTH               Depth of spidering (number of subpages to visit) (default: 3)
+  --depth DEPTH               Depth of spidering (number of subpages to visit) (default: 1)
   --min-length MIN_LENGTH     Minimum keyword length (default: 4)
 ````
 
@@ -30,7 +30,7 @@ pip3 install -r requirements.txt
 ### Running
 
 ````
-python3 spidersel.py --url https://www.apple.com/ --min-length 7
+python3 spidersel.py --url https://www.apple.com/
 ````
 
 The extracted keywords will be stored in an output file.
