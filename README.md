@@ -23,6 +23,10 @@ options:
 # clone repository and change directory
 git clone https://github.com/Haxxnet/SpiderSel && cd SpiderSel
 
+# optionally installed google-chrome
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-stable_current_amd64.deb
+
 # install python dependencies; optionally use a virtual environment (e.g. virtualenv, pipenv, etc.)
 pip3 install -r requirements.txt
 ````
