@@ -3,15 +3,13 @@ Author: LRVT - https://github.com/l4rm4nd
 Desc: Python 3 script to crawl and spider websites for keywords via selenium
 Version: v1.0
 '''
-
 import argparse
-import re, os
-import string
-from bs4 import BeautifulSoup
+import re, os, sys
 from datetime import datetime
+from urllib.parse import urljoin, urlparse
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from urllib.parse import urljoin, urlparse
+from bs4 import BeautifulSoup
 import tldextract
 
 # Function to extract keywords from a web page
@@ -52,14 +50,12 @@ def is_weird_keyword(string):
     # Determine if the string is a common word or a weird URL or path
     if not has_special_chars and not is_url_or_path:
         return False  # normal keyword
-    else:
-        return True  # weird keyword, do not add
+    return True  # weird keyword, do not add
 
 def clean_words(input_string):
     if is_url(input_string) or is_email(input_string) or is_weird_keyword(input_string):
         return ""
-    else:
-        return input_string
+    return input_string
 
 # Function to spider links within the website
 def spider_links(driver, base_url, depth, visited_urls, min_length):
@@ -84,6 +80,7 @@ def spider_links(driver, base_url, depth, visited_urls, min_length):
     return combined_keywords
 
 if __name__ == "__main__":
+    print()
     parser = argparse.ArgumentParser(description="Web Crawler and Keyword Extractor")
     parser.add_argument("--url", required=True, type=str, help="URL of the website to crawl")
     parser.add_argument("--depth", required=False, default=1, type=int, help="Depth of spidering (number of subpages to visit) (default: 1)")
@@ -92,9 +89,12 @@ if __name__ == "__main__":
 
     # Create output folder
     try:
-       os.mkdir("results")
-    except Exception as e:
-       pass
+        os.mkdir("results")
+    except PermissionError as e:
+        print("[x] Permission denied. Unable to create the directory 'results'.")
+        sys.exit(0)
+    except FileExistsError as e:
+        pass
 
     # Headless browser setup with Selenium
     # Specify the path to the ChromeDriver executable
@@ -125,7 +125,7 @@ if __name__ == "__main__":
 
     # Get the root domain from the URL
     extracted = tldextract.extract(args.url)
-    
+
     if extracted.subdomain:
         fqdn = f"{extracted.subdomain}.{extracted.domain}.{extracted.suffix}"
     else:
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     output_filename = f"{fqdn}_{current_datetime}.txt"
 
     # Write the keywords to the output file
-    with open("results/" + output_filename, 'w') as file:
+    with open("results/" + output_filename, 'w', encoding="utf-8") as file:
         file.write(combined_keywords)
 
     print()
