@@ -58,9 +58,9 @@ def spider_links(driver, base_url, depth, visited_urls, min_length):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Web Crawler and Keyword Extractor")
-    parser.add_argument("--url", type=str, help="URL of the website to crawl")
-    parser.add_argument("--depth", default=1, type=int, help="Depth of spidering (number of subpages to visit) (default: 1)")
-    parser.add_argument("--min-length", type=int, default=4, help="Minimum keyword length (default: 4)")
+    parser.add_argument("--url", required=True, type=str, help="URL of the website to crawl")
+    parser.add_argument("--depth", required=False, default=1, type=int, help="Depth of spidering (number of subpages to visit) (default: 1)")
+    parser.add_argument("--min-length", required=False, type=int, default=4, help="Minimum keyword length (default: 4)")
     args = parser.parse_args()
 
     # Headless browser setup with Selenium
