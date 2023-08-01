@@ -21,18 +21,45 @@ def extract_keywords(page_content, min_length):
     for text in soup.stripped_strings:
         words = text.split()
         for word in words:
-            word = remove_special_characters(word)
+            word = clean_words(word)
             if len(word) >= min_length:
                 keywords.add(word.lower())
     return list(keywords)
 
-def remove_special_characters(input_string):
-    # Define the regular expression pattern to match special characters
-    # Not followed by valid characters (alphanumeric or hyphen)
-    pattern = r'[^\w-]|(?<!\w)-(?!\w)'
-    # Replace special characters with an empty string
-    cleaned_string = re.sub(pattern, '', input_string)
-    return cleaned_string
+def is_url(input_string):
+    # Regular expression pattern to match a URL
+    url_prefixes = ["https://", "http://", "ftp://", "ftps://", "mailto://", "unix://"]
+    return any(input_string.startswith(prefix) for prefix in url_prefixes)
+
+def is_email(input_string):
+    # Regular expression pattern to match an email address
+    email_pattern = r'^[\w.-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$'
+    return re.match(email_pattern, input_string) is not None
+
+def is_weird_keyword(string):
+    # Define a regex pattern to check for special characters like _, /, and other symbols
+    special_chars_pattern = r"[\W_]+"
+
+    # Define a regex pattern to check for URLs and paths
+    url_or_path_pattern = r"^(?:\w+:\/\/|\/).*$"
+
+    # Check if the string contains special characters
+    has_special_chars = bool(re.search(special_chars_pattern, string))
+
+    # Check if the string matches the URL or path pattern
+    is_url_or_path = bool(re.match(url_or_path_pattern, string))
+
+    # Determine if the string is a common word or a weird URL or path
+    if not has_special_chars and not is_url_or_path:
+        return False  # normal keyword
+    else:
+        return True  # weird keyword, do not add
+
+def clean_words(input_string):
+    if is_url(input_string) or is_email(input_string) or is_weird_keyword(input_string):
+        return ""
+    else:
+        return input_string
 
 # Function to spider links within the website
 def spider_links(driver, base_url, depth, visited_urls, min_length):
@@ -42,7 +69,7 @@ def spider_links(driver, base_url, depth, visited_urls, min_length):
     driver.get(base_url)
     page_content = driver.page_source
     keywords = extract_keywords(page_content, min_length)
-    print(f"[i] Spidering website {base_url}")
+    print(f"[task] Spidering {base_url}")
 
     combined_keywords = keywords.copy()
     soup = BeautifulSoup(page_content, 'html.parser')
@@ -114,5 +141,5 @@ if __name__ == "__main__":
         file.write(combined_keywords)
 
     print()
-    print(f"[i] Crawled {num_keywords} keywords.")
-    print(f"[i] Keywords have been written to {output_filename}. Enjoy!")
+    print(f"[info] Keywords crawled: {num_keywords}")
+    print(f"[info] Keywords outfile: {output_filename}")
