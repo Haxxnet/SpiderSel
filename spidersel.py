@@ -5,7 +5,7 @@ Version: v1.0
 '''
 
 import argparse
-import re
+import re, os
 import string
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -63,10 +63,23 @@ if __name__ == "__main__":
     parser.add_argument("--min-length", required=False, type=int, default=4, help="Minimum keyword length (default: 4)")
     args = parser.parse_args()
 
+    # Create output folder
+    try:
+       os.mkdir("results")
+    except Exception as e:
+       pass
+
     # Headless browser setup with Selenium
+    # Specify the path to the ChromeDriver executable
+    chrome_driver_path = "/usr/bin/chromedriver"
+
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--window-size=1920,1080')
+    chrome_options.add_argument("--disable-setuid-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(options=chrome_options)
 
     # Start spidering from the provided URL
@@ -85,14 +98,19 @@ if __name__ == "__main__":
 
     # Get the root domain from the URL
     extracted = tldextract.extract(args.url)
-    fqdn = f"{extracted.subdomain}.{extracted.domain}.{extracted.suffix}"
+    
+    if extracted.subdomain:
+        fqdn = f"{extracted.subdomain}.{extracted.domain}.{extracted.suffix}"
+    else:
+        fqdn = f"{extracted.domain}.{extracted.suffix}"
+
     # Get the current date and time in the specified format
     current_datetime = datetime.now().strftime("%Y%m%d%H%M%S")
     # Create the output filename
     output_filename = f"{fqdn}_{current_datetime}.txt"
 
     # Write the keywords to the output file
-    with open(output_filename, 'w') as file:
+    with open("results/" + output_filename, 'w') as file:
         file.write(combined_keywords)
 
     print()

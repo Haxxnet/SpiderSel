@@ -15,7 +15,28 @@ options:
   --min-length MIN_LENGTH     Minimum keyword length (default: 4)
 ````
 
-## 🐍 Example 1 - Native Python
+## 🐳 Example 1 - Docker Run
+
+### External Dockerhub Image
+
+````
+# start the spidersel.py script via docker
+docker run -v ${PWD}:/app/results --rm l4rm4nd/spidersel:latest --url https:/www.apple.com
+````
+
+You will find your scan results in the current directory.
+
+### Local Docker Build Image
+
+If you don't trust my image on Dockerhub, please go ahead and build the image yourself:
+
+````
+git clone https://github.com/Haxxnet/SpiderSel && cd SpiderSel
+docker build -t spidersel .
+docker run -v ${PWD}:/app/results --rm spidersel --url https:/www.apple.com
+````
+
+## 🐍 Example 2 - Native Python
 
 ### Installation
 
@@ -37,4 +58,4 @@ pip3 install -r requirements.txt
 python3 spidersel.py --url https://www.apple.com/
 ````
 
-The extracted keywords will be stored in an output file.
+The extracted keywords will be stored in an output file within the results folder.
