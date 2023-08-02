@@ -62,27 +62,29 @@ def spider_links(driver, base_url, depth, visited_urls, min_length):
     if depth <= 0:
         return []
 
+    print(f"[task] Spidering {base_url}")
     driver.get(base_url)
     page_content = driver.page_source
     keywords = extract_keywords(page_content, min_length)
-    print(f"[task] Spidering {base_url}")
 
+    visited_urls.add(base_url)
+    
     combined_keywords = keywords.copy()
     soup = BeautifulSoup(page_content, 'html.parser')
     for link in soup.find_all('a', href=True):
         absolute_url = urljoin(base_url, link['href'])
         parsed_url = urlparse(absolute_url)
-        if parsed_url.netloc == urlparse(base_url).netloc and absolute_url not in visited_urls:
-            visited_urls.add(absolute_url)
-            subpage_keywords = spider_links(driver, absolute_url, depth - 1, visited_urls, min_length)
-            combined_keywords.extend(subpage_keywords)
+        if parsed_url.netloc == urlparse(base_url).netloc:
+            if absolute_url not in visited_urls:
+                subpage_keywords = spider_links(driver, absolute_url, depth - 1, visited_urls, min_length)
+                combined_keywords.extend(subpage_keywords)
 
     return combined_keywords
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Web Crawler and Keyword Extractor")
     parser.add_argument("--url", required=True, type=str, help="URL of the website to crawl")
-    parser.add_argument("--depth", required=False, default=4, type=int, help="Depth of spidering (number of subpages to visit) (default: 4)")
+    parser.add_argument("--depth", required=False, default=2, type=int, help="Depth of spidering (number of subpages to visit) (default: 2)")
     parser.add_argument("--min-length", required=False, type=int, default=4, help="Minimum keyword length (default: 4)")
     args = parser.parse_args()
 
