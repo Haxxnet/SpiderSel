@@ -2,4 +2,4 @@ argparse
 beautifulsoup4
 selenium
 tldextract
-chromedriver-binary
+#chromedriver-binary
