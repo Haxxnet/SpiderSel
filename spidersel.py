@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # Combine keywords from all spidered sites and print them as newline-separated values
     combined_keywords = '\n'.join(unique_keywords)
     keyword_list = combined_keywords.split('\n')
-    num_keywords = len(keyword_list)
+    num_keywords = len(keyword_list) - 1
 
     # Get the root domain from the URL
     extracted = tldextract.extract(args.url)
