@@ -140,6 +140,5 @@ if __name__ == "__main__":
     with open("results/" + output_filename, 'w', encoding="utf-8") as file:
         file.write(combined_keywords)
 
-    print()
     print(f"[info] Keywords crawled: {num_keywords}")
     print(f"[info] Keywords outfile: {output_filename}")
