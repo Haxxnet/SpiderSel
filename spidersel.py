@@ -84,7 +84,7 @@ def spider_links(driver, base_url, depth, visited_urls, min_length):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Web Crawler and Keyword Extractor")
     parser.add_argument("--url", required=True, type=str, help="URL of the website to crawl")
-    parser.add_argument("--depth", required=False, default=2, type=int, help="Depth of spidering (number of subpages to visit) (default: 2)")
+    parser.add_argument("--depth", required=False, default=1, type=int, help="Depth of subpage spidering (default: 1)")
     parser.add_argument("--min-length", required=False, type=int, default=4, help="Minimum keyword length (default: 4)")
     args = parser.parse_args()
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     # Start spidering from the provided URL
     visited_urls = set()
     visited_urls.add(args.url)
-    keywords = spider_links(driver, args.url, args.depth, visited_urls, args.min_length)
+    keywords = spider_links(driver, args.url, args.depth+1, visited_urls, args.min_length)
     unique_keywords = list(set(keywords))
 
     # Close the browser after spidering is done
