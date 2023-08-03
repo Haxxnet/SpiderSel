@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
     # Headless browser setup with Selenium
     # Specify the path to the ChromeDriver executable
-    chrome_driver_path = "/usr/bin/chromedriver"
+    #chrome_driver_path = "/usr/bin/chromedriver"
 
     chrome_options = Options()
     chrome_options.add_argument("--headless")
