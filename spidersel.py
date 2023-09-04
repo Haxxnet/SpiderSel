@@ -12,6 +12,8 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import tldextract
 
+ignored_words = set()
+
 # Function to extract keywords from a web page
 def extract_keywords(page_content, min_length):
     soup = BeautifulSoup(page_content, 'html.parser')
@@ -19,9 +21,14 @@ def extract_keywords(page_content, min_length):
     for text in soup.stripped_strings:
         words = text.split()
         for word in words:
+            pattern = r'^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$'
+            word = re.sub(pattern, '', word)
             word = clean_words(word)
             if len(word) >= min_length:
-                keywords.add(word.lower())
+                if args.lowercase:
+                    keywords.add(word.lower())
+                else:
+                    keywords.add(word)
     return list(keywords)
 
 def is_url(input_string):
@@ -54,6 +61,7 @@ def is_weird_keyword(string):
 
 def clean_words(input_string):
     if is_url(input_string) or is_email(input_string) or is_weird_keyword(input_string):
+        ignored_words.add(input_string)
         return ""
     return input_string
 
@@ -86,6 +94,7 @@ if __name__ == "__main__":
     parser.add_argument("--url", required=True, type=str, help="URL of the website to crawl")
     parser.add_argument("--depth", required=False, default=1, type=int, help="Depth of subpage spidering (default: 1)")
     parser.add_argument("--min-length", required=False, type=int, default=4, help="Minimum keyword length (default: 4)")
+    parser.add_argument("--lowercase", help="Convert all keywords to lowercase", required=False, action='store_true')
     args = parser.parse_args()
 
     # Create output folder
@@ -136,11 +145,19 @@ if __name__ == "__main__":
     current_datetime = datetime.now().strftime("%Y%m%d%H%M%S")
     # Create the output filename
     output_filename = f"{fqdn}_{current_datetime}.txt"
+    output_ignore_filename = f"{fqdn}_{current_datetime}_ignored_words.txt"
 
     # Write the keywords to the output file
     with open("results/" + output_filename, 'w', encoding="utf-8") as file:
         file.write(combined_keywords)
+
+    # Write ignored keywords into outfile too
+    with open("results/" + output_ignore_filename, 'w', encoding="utf-8") as file:
+        unique_ignored_words = list(set(ignored_words))
+        unique_ignored_words = '\n'.join(unique_ignored_words)
+        file.write(unique_ignored_words)
     
     print()
     print(f"[info] Keywords crawled: {num_keywords}")
     print(f"[info] Keywords outfile: {output_filename}")
+    print(f"[info] Keywords ignored: {output_ignore_filename}")
