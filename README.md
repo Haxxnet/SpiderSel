@@ -1,6 +1,6 @@
 <div align="center" width="100%">
     <h1>🕷️ SpiderSel 🕷️</h1>
-    <p>Python3 script to crawl and spider websites for keywords via selenium</p><p>
+    <p>Python 3 script to crawl and spider websites for keywords via selenium</p><p>
     <a target="_blank" href="https://github.com/l4rm4nd"><img src="https://img.shields.io/badge/maintainer-LRVT-orange" /></a>
     <a target="_blank" href="https://hub.docker.com/repository/docker/l4rm4nd/spidersel/general"><img src="https://badgen.net/badge/icon/l4rm4nd%2Fspidersel:latest?icon=docker&label" /></a><br>
     <!--<a target="_blank" href="#"><img src="https://ForTheBadge.com/images/badges/makes-people-smile.svg" /></a><br>-->
