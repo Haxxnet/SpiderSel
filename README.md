@@ -30,7 +30,8 @@ options:
   --url URL                   URL of the website to crawl
   --depth DEPTH               Depth of subpage spidering (default: 1)
   --min-length MIN_LENGTH     Minimum keyword length (default: 4)
-  --lowercase           Convert all keywords to lowercase
+  --lowercase                 Convert all keywords to lowercase
+  --include-emails            Include emails as keywords
 ````
 
 ## 🐳 Example 1 - Docker Run
@@ -38,7 +39,7 @@ options:
 ### External Dockerhub Image
 
 ````
-docker run -v ${PWD}:/app/results --rm l4rm4nd/spidersel:latest --url https://www.apple.com --lowercase
+docker run -v ${PWD}:/app/results --rm l4rm4nd/spidersel:latest --url https://www.apple.com --lowercase --include-emails
 ````
 
 You will find your scan results in the current directory.
@@ -50,7 +51,7 @@ If you don't trust my image on Dockerhub, please go ahead and build the image yo
 ````
 git clone https://github.com/Haxxnet/SpiderSel && cd SpiderSel
 docker build -t spidersel .
-docker run -v ${PWD}:/app/results --rm spidersel --url https:/www.apple.com --lowercase
+docker run -v ${PWD}:/app/results --rm spidersel --url https:/www.apple.com --lowercase --include-emails
 ````
 
 ## 🐍 Example 2 - Native Python
@@ -72,7 +73,7 @@ pip3 install -r requirements.txt
 ### Running
 
 ````
-python3 spidersel.py --url https://www.apple.com/ --lowercase
+python3 spidersel.py --url https://www.apple.com/ --lowercase --include-emails
 ````
 
 The extracted keywords will be stored in an output file within the results folder.
