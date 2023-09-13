@@ -12,8 +12,8 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import tldextract
 
-ignored_words = set()
 
+ignored_words = set()
 # Function to extract keywords from a web page
 def extract_keywords(page_content, min_length):
     soup = BeautifulSoup(page_content, 'html.parser')
@@ -41,29 +41,42 @@ def is_email(input_string):
     email_pattern = r'^[\w.-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$'
     return re.match(email_pattern, input_string) is not None
 
-def is_weird_keyword(string):
-    # Define a regex pattern to check for special characters like _, /, and other symbols
-    special_chars_pattern = r"[\W_]+"
+def filter_keywords(keywords):
+    filtered_keywords = []
+    split_pattern = r'[^a-zA-Z0-9@]+'
 
-    # Define a regex pattern to check for URLs and paths
-    url_or_path_pattern = r"^(?:\w+:\/\/|\/).*$"
+    for keyword in keywords:
+        # if word can be splitted, add to ignored_words
+        if re.search(split_pattern, keyword):
+            ignored_words.add(keyword)
+            
+        # Split by special characters
+        for word in re.split(split_pattern, keyword):
+            # Ignore empty strings
+            if not word:
+                ignored_words.add(word)
+                continue
 
-    # Check if the string contains special characters
-    has_special_chars = bool(re.search(special_chars_pattern, string))
+            # filter keywords < min_length
+            if len(word) < 4:
+                continue
 
-    # Check if the string matches the URL or path pattern
-    is_url_or_path = bool(re.match(url_or_path_pattern, string))
-
-    # Determine if the string is a common word or a weird URL or path
-    if not has_special_chars and not is_url_or_path:
-        return False  # normal keyword
-    return True  # weird keyword, do not add
+            filtered_keywords.append(word)
+    
+    return filtered_keywords 
 
 def clean_words(input_string):
-    if is_url(input_string) or is_email(input_string) or is_weird_keyword(input_string):
-        ignored_words.add(input_string)
-        return ""
-    return input_string
+    if args.include_emails:
+        if is_url(input_string):
+            ignored_words.add(input_string)
+            return ""
+        return input_string
+    else:
+        if is_url(input_string) or is_email(input_string):
+        #if is_url(input_string) or is_weird_keyword(input_string):
+            ignored_words.add(input_string)
+            return ""
+        return input_string
 
 # Function to spider links within the website
 def spider_links(driver, base_url, depth, visited_urls, min_length):
@@ -95,6 +108,7 @@ if __name__ == "__main__":
     parser.add_argument("--depth", required=False, default=1, type=int, help="Depth of subpage spidering (default: 1)")
     parser.add_argument("--min-length", required=False, type=int, default=4, help="Minimum keyword length (default: 4)")
     parser.add_argument("--lowercase", help="Convert all keywords to lowercase", required=False, action='store_true')
+    parser.add_argument("--include-emails", help="Include emails as keywords", required=False, action='store_true')
     args = parser.parse_args()
 
     # Create output folder
@@ -124,6 +138,7 @@ if __name__ == "__main__":
     visited_urls.add(args.url)
     keywords = spider_links(driver, args.url, args.depth+1, visited_urls, args.min_length)
     unique_keywords = list(set(keywords))
+    unique_keywords = list(set(filter_keywords(unique_keywords)))
 
     # Close the browser after spidering is done
     driver.quit()
