@@ -43,7 +43,7 @@ def is_email(input_string):
 
 def filter_keywords(keywords):
     filtered_keywords = []
-    split_pattern = r'[^a-zA-Z0-9]+'
+    split_pattern = r'[^a-zA-Z0-9äüö]+'
     email_pattern = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 
     for keyword in keywords:
