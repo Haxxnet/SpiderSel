@@ -38,15 +38,20 @@ def is_url(input_string):
 
 def is_email(input_string):
     # Regular expression pattern to match an email address
-    email_pattern = r'^[\w.-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$'
-    return re.match(email_pattern, input_string) is not None
+    email_pattern = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+    return re.fullmatch(email_pattern, input_string) is not None
 
 def filter_keywords(keywords):
     filtered_keywords = []
-    split_pattern = r'[^a-zA-Z0-9@]+'
+    split_pattern = r'[^a-zA-Z0-9]+'
+    email_pattern = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 
     for keyword in keywords:
-        # if word can be splitted, add to ignored_words
+        # when keyword is an email, add to list before being split
+        if re.fullmatch(email_pattern, keyword) is not None:
+            filtered_keywords.append(keyword)
+
+        # if word can be splitted, add full keyword to ignored_words first
         if re.search(split_pattern, keyword):
             ignored_words.add(keyword)
             
