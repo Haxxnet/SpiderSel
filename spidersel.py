@@ -63,7 +63,12 @@ def filter_keywords(keywords):
                 continue
 
             # filter keywords < min_length
-            if len(word) < 4:
+            if args.min_length:
+                minlength = args.min_length
+            else:
+                minlength = 4
+
+            if len(word) < minlength:
                 continue
 
             filtered_keywords.append(word)
