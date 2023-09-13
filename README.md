@@ -14,7 +14,7 @@ SpiderSel provides the following features:
 - Crawling of HTTP and HTTPS websites for keywords via Selenium (native JS support)
 - Spidering of new URLs found within source code (adjustable depth, stays samesite)
 - Filtering keywords by length and removing non-sense (paths, emails, protocol handlers etc.)
-- Storing keywords into a separate results directory (txt file)
+- Storing keywords and ignored strings into a separate results directory (txt files)
 
 Basically alike to [CeWL](https://github.com/digininja/CeWL) or [CeWLeR](https://github.com/roys/cewler) but with support for websites that require JavaScript.
 
