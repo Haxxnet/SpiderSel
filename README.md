@@ -63,8 +63,8 @@ docker run -v ${PWD}:/app/results --rm spidersel --url https:/www.apple.com --lo
 git clone https://github.com/Haxxnet/SpiderSel && cd SpiderSel
 
 # optionally install google-chrome if not available yet
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo dpkg -i google-chrome-stable_current_amd64.deb
+wget http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_135.0.7049.114-1_amd64.deb
+sudo dpkg -i google-chrome-stable_135.0.7049.114-1_amd64.deb
 
 # install python dependencies; optionally use a virtual environment (e.g. virtualenv, pipenv, etc.)
 pip3 install -r requirements.txt
